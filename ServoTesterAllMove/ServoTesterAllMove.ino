@@ -12,7 +12,6 @@ Making them all move at once
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
 // Setup the ros node handler
-
 //ros::NodeHandle nh;
 
 char hello[13] = "Hello world!";
@@ -21,18 +20,19 @@ char hello[13] = "Hello world!";
 // want these to be as small/large as possible without hitting the hard stop
 // for max range. You'll have to tweak them as necessary to match the servos you
 // have!
-#define SERVOMIN  150 // This is the 'minimum' pulse length count (out of 4096)
-#define SERVOMAX  600 // This is the 'maximum' pulse length count (out of 4096)
 #define USMIN  450 // This is the rounded 'minimum' microsecond length based on the minimum pulse of 150
 #define USMAX  2450 // This is the rounded 'maximum' microsecond length based on the maximum pulse of 600
 #define SERVO_FREQ 60 // Analog servos run at ~50 Hz updates
 #define SERVO_MIDPOINT 1500
 
-#define DELTA_FREQ 1
+#define DELTA_FREQ 60
+#define SERVO_TO_MOVE 1
 
 // our servo # counter
 uint8_t servonum = 0;
-
+uint16_t microsec = SERVO_MIDPOINT;
+uint16_t del = 1/DELTA_FREQ + 1;
+int direction = 1;
 void setup() {
   Serial.begin(9600);
   Serial.println("8 channel Servo test!");
@@ -62,55 +62,60 @@ void setup() {
   {
     pwm.writeMicroseconds(servonumber, SERVO_MIDPOINT);
   }
-
+  setallservomidpoint();
   //nh.initNode();
   delay(10);
 }
 
-// You can use this function if you'd like to set the pulse length in seconds
-// e.g. setServoPulse(0, 0.001) is a ~1 millisecond pulse width. It's not precise!
-void setServoPulse(uint8_t n, double pulse) {
-  double pulselength;
-  
-  pulselength = 1000000;   // 1,000,000 us per second
-  pulselength /= SERVO_FREQ;   // Analog servos run at ~60 Hz updates
-  Serial.print(pulselength); Serial.println(" us per period"); 
-  pulselength /= 4096;  // 12 bits of resolution
-  Serial.print(pulselength); Serial.println(" us per bit"); 
-  pulse *= 1000000;  // convert input seconds to us
-  pulse /= pulselength;
-  Serial.println(pulse);
-  pwm.setPWM(n, 0, pulse);
+void setallservomidpoint()
+{
+  microsec = SERVO_MIDPOINT;
+  for(int servonumber = 0; servonumber<16; servonumber++)
+  {
+    pwm.writeMicroseconds(servonumber, microsec);
+  }
+
 }
 
 void loop() {
-  
-  // Drive each servo one at a time using setPWM()
-  Serial.println(servonum +"=Servo#");
-  
-  uint16_t microsec = SERVO_MIDPOINT;
-  // Drive each servo one at a time using writeMicroseconds(), it's not precise due to calculation rounding!
-  // The writeMicroseconds() function is used to mimic the Arduino Servo library writeMicroseconds() behavior. 
-  for (microsec = SERVO_MIDPOINT; microsec < USMAX; microsec+=DELTA_FREQ) {
-    pwm.writeMicroseconds(servonum, microsec);
-    //Serial.println(microsec);
+
+  pwm.writeMicroseconds(0, microsec);
+  pwm.writeMicroseconds(1, microsec);
+  pwm.writeMicroseconds(2, microsec);
+  pwm.writeMicroseconds(3, microsec);
+  pwm.writeMicroseconds(4, microsec);
+  pwm.writeMicroseconds(5, microsec);
+  pwm.writeMicroseconds(6, microsec);
+  pwm.writeMicroseconds(7, microsec);     
+  pwm.writeMicroseconds(8, microsec);
+  pwm.writeMicroseconds(9, microsec);
+  pwm.writeMicroseconds(10, microsec);
+  pwm.writeMicroseconds(11, microsec);
+  pwm.writeMicroseconds(12, microsec);
+  pwm.writeMicroseconds(13, microsec);
+  pwm.writeMicroseconds(14, microsec);
+  pwm.writeMicroseconds(15, microsec);
+  if(microsec > USMAX)
+  {
+    direction = -1;
+    //setallservomidpoint();
   }
+  else if( microsec < USMIN)
+  {
+    direction = 1;
+  }
+
+  if(direction>0)
+  {
+    microsec = microsec + ( DELTA_FREQ);
+  }
+  else
+  {
+    microsec = microsec - ( DELTA_FREQ);
+  }
+  
+  
   Serial.println(microsec);
 
-  delay(500);
-  for (microsec = USMAX; microsec > USMIN; microsec-=DELTA_FREQ) {
-    pwm.writeMicroseconds(servonum, microsec);
-    //Serial.println(microsec);
-  }
-  Serial.println(microsec);
-  delay(500);
-  for (microsec = USMIN; microsec < SERVO_MIDPOINT; microsec+=DELTA_FREQ) {
-    pwm.writeMicroseconds(servonum, microsec);
-    //Serial.println(microsec);
-  }
-  Serial.println(microsec);
-  delay(500);
-
-  servonum++;
-  if (servonum > 7) servonum = 0; // Testing the first 8 servo channels
+  delay(del);
 }
