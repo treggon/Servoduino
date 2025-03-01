@@ -77,24 +77,28 @@ void setallservomidpoint()
 
 }
 
-void loop() {
+void setalltomicrosec(uint16_t usec)
+{
+  pwm.writeMicroseconds(0, usec);
+  pwm.writeMicroseconds(1, usec);
+  pwm.writeMicroseconds(2, usec);
+  pwm.writeMicroseconds(3, usec);
+  pwm.writeMicroseconds(4, usec);
+  pwm.writeMicroseconds(5, usec);
+  pwm.writeMicroseconds(6, usec);
+  pwm.writeMicroseconds(7, usec);     
+  pwm.writeMicroseconds(8, usec);
+  pwm.writeMicroseconds(9, usec);
+  pwm.writeMicroseconds(10, usec);
+  pwm.writeMicroseconds(11, usec);
+  pwm.writeMicroseconds(12, usec);
+  pwm.writeMicroseconds(13, usec);
+  pwm.writeMicroseconds(14, usec);
+  pwm.writeMicroseconds(15, usec);
+}
 
-  pwm.writeMicroseconds(0, microsec);
-  pwm.writeMicroseconds(1, microsec);
-  pwm.writeMicroseconds(2, microsec);
-  pwm.writeMicroseconds(3, microsec);
-  pwm.writeMicroseconds(4, microsec);
-  pwm.writeMicroseconds(5, microsec);
-  pwm.writeMicroseconds(6, microsec);
-  pwm.writeMicroseconds(7, microsec);     
-  pwm.writeMicroseconds(8, microsec);
-  pwm.writeMicroseconds(9, microsec);
-  pwm.writeMicroseconds(10, microsec);
-  pwm.writeMicroseconds(11, microsec);
-  pwm.writeMicroseconds(12, microsec);
-  pwm.writeMicroseconds(13, microsec);
-  pwm.writeMicroseconds(14, microsec);
-  pwm.writeMicroseconds(15, microsec);
+void domicroseclogic()
+{
   if(microsec > USMAX)
   {
     direction = -1;
@@ -113,9 +117,14 @@ void loop() {
   {
     microsec = microsec - ( DELTA_FREQ);
   }
-  
-  
-  Serial.println(microsec);
 
+}
+
+void loop() {
+
+  setalltomicrosec(microsec);
+  domicroseclogic();
+  Serial.println(microsec);
   delay(del);
+
 }
