@@ -11,11 +11,6 @@ Making them all move at once
 // called this way, it uses the default address 0x40
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
-// Setup the ros node handler
-//ros::NodeHandle nh;
-
-char hello[13] = "Hello world!";
-
 // Depending on your servo make, the pulse width min and max may vary, you 
 // want these to be as small/large as possible without hitting the hard stop
 // for max range. You'll have to tweak them as necessary to match the servos you
