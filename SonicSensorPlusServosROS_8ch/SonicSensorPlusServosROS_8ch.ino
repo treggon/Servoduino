@@ -83,7 +83,7 @@ sonicservo::Servo servo7_msg;
 
 ros::Publisher pub_range(ultrasoundframeid, &range_msg);
 ros::Publisher pub_armbutton(armbuttonframeid, &button_msg);
-ros::Publisher pub_servo0(servo0frameid, &servo10_msg);
+ros::Publisher pub_servo0(servo0frameid, &servo0_msg);
 ros::Publisher pub_servo1(servo1frameid, &servo1_msg);
 ros::Publisher pub_servo2(servo2frameid, &servo2_msg);
 ros::Publisher pub_servo3(servo3frameid, &servo3_msg);
@@ -276,15 +276,15 @@ void setDefaultRangeMessage() {
 void setDefaultServoMessages(){
 
   // 0
-  servo10_msg.header.frame_id = servo0frameid;
-  servo10_msg.channel_id = 1;
-  servo10_msg.channel_name = "steering";
-  servo10_msg.max_us = DEFAULT_SERVO_MAX;
-  servo10_msg.min_us = DEFAULT_SERVO_MIN;
-  servo10_msg.safe_us = DEFAULT_SERVO_SAFE;
-  servo10_msg.default_us = DEFAULT_SERVO_CENTER;
-  servo10_msg.pulsewidth_us = DEFAULT_SERVO_PWM;
-  servo10_msg.speed = DEFAULT_SERVO_SPEED;
+  servo0_msg.header.frame_id = servo0frameid;
+  servo0_msg.channel_id = 1;
+  servo0_msg.channel_name = "steering";
+  servo0_msg.max_us = DEFAULT_SERVO_MAX;
+  servo0_msg.min_us = DEFAULT_SERVO_MIN;
+  servo0_msg.safe_us = DEFAULT_SERVO_SAFE;
+  servo0_msg.default_us = DEFAULT_SERVO_CENTER;
+  servo0_msg.pulsewidth_us = DEFAULT_SERVO_PWM;
+  servo0_msg.speed = DEFAULT_SERVO_SPEED;
 
   // 1
   servo1_msg.header.frame_id = servo0frameid;
